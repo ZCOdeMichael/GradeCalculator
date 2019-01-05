@@ -1,4 +1,3 @@
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -32,7 +31,7 @@ public class TestGradeUI extends JPanel implements ListSelectionListener{
 	private JTextField total;
 	private JTextField assignmentName;
 	  
-	private JLabel finalTotal;
+	private static JLabel finalTotal;
 	private JLabel textGrade;
 	private JLabel textTotal;
 	private JLabel textAssignment;
@@ -53,7 +52,7 @@ public TestGradeUI() {
     model = new DefaultListModel();
     list = new JList(model);
     
-    finalTotal = new JLabel("HA YOU SUC!");
+    finalTotal = new JLabel("Final Grade Percentage: 0.0%");
     textGrade = new JLabel("Actual Grade:");
     textTotal = new JLabel("Total Grade:");
     textAssignment = new JLabel("Assign. Name:");
@@ -157,11 +156,12 @@ public TestGradeUI() {
 	  public void actionPerformed(ActionEvent e) {
 		  int index = list.getSelectedIndex();
           model.remove(index);
-          System.out.println(index);
+          grades.remove(index);
           int size = model.getSize();
-          finalTotal.setText("" + calcGrades(grades));
+         
+          updateFinalTotal();
           
-          /* After remove still selects last element
+         
           if (size == 0) { //Nobody's left, disable firing.
               removeButton.setEnabled(false);
 
@@ -174,7 +174,7 @@ public TestGradeUI() {
               list.setSelectedIndex(index);
               list.ensureIndexIsVisible(index);
           }
-          */
+          
 	}
   }
   
@@ -192,22 +192,29 @@ public TestGradeUI() {
 				Double temp1 = (double) Double.parseDouble(grade.getText());
 				Double temp2 = (double) Double.parseDouble(total.getText());
 				int index = list.getSelectedIndex();
+				grades.remove(index);
+				grades.add(index, new Grades(temp1, temp2, assignmentName.getText()));
+				
 				model.removeElementAt(index);
 				model.add(index, temp);
 				
-				grades.remove(index);
-				grades.add(index, new Grades(temp1, temp2, assignmentName.getText()));
+				
+				list.setSelectedIndex(index);
+				updateFinalTotal();
 			}else {
 				temp = grade.getText() + " / " + total.getText() + " : NA";
 				Double temp1 = (double) Double.parseDouble(grade.getText());
 				Double temp2 = (double) Double.parseDouble(total.getText());
 				int index = list.getSelectedIndex();
+				grades.remove(index);
+				grades.add(index, new Grades(temp1, temp2));
 				
 				model.removeElementAt(index);
 				model.add(index, temp);
 				
-				grades.remove(index);
-				grades.add(index, new Grades(temp1, temp2));
+				
+				list.setSelectedIndex(index);
+				updateFinalTotal();
 			
 			}
 		}
@@ -222,7 +229,7 @@ public TestGradeUI() {
 				
 				grades.add(new Grades(temp1, temp2, assignmentName.getText()));
 				model.addElement(temp);	
-				finalTotal.setText("Final Grade Percentage: " + Math.round(calcGrades(grades)*100.0)/100.0 + "%");
+				updateFinalTotal();
 				grade.setText("");
 				total.setText("");
 				assignmentName.setText("");
@@ -233,7 +240,7 @@ public TestGradeUI() {
 				
 				grades.add(new Grades(temp1, temp2));
 				model.addElement(temp);	
-				finalTotal.setText("Final Grade Percentage: " + Math.round(calcGrades(grades)*100.0)/100.0 + "%");
+				updateFinalTotal();
 				grade.setText("");
 				total.setText("");
 				assignmentName.setText("");
@@ -256,18 +263,20 @@ public TestGradeUI() {
   }
 
 
-  public static double calcGrades(ArrayList<Grades> grades) {
+  public static double calcGrades() {
 	  double grade = 0;
 	  double total = 0;
 	  for(int i = 0; i < grades.size(); i++) {
 		  grade += grades.get(i).getGrade();
 		  total += grades.get(i).getTotal();
 	  }
-	  
+	
 	  
 	  return (grade / total) * 100;
   }
 
-
+  private void updateFinalTotal() {
+	  finalTotal.setText("Final Grade Percentage: " + Math.round(calcGrades()*100.0)/100.0 + "%");
+  }
 
 }
