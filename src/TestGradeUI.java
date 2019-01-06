@@ -19,6 +19,10 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+//add weight feature
+//clean up code
+
+
 public class TestGradeUI extends JPanel implements ListSelectionListener{
 
   
@@ -30,42 +34,60 @@ public class TestGradeUI extends JPanel implements ListSelectionListener{
 	private JTextField grade;
 	private JTextField total;
 	private JTextField assignmentName;
-	  
+	private JTextField weight;
+	
 	private static JLabel finalTotal;
+	private static JLabel textGradeWeight;
+	
 	private JLabel textGrade;
 	private JLabel textTotal;
 	private JLabel textAssignment;
-	
+	private JLabel textWGrade;
 	
 	private JButton addButton;
 	private JButton removeButton;
 	private JButton edit;
-	  
+	private JButton gradeWeight;
+	
 	private Handler handler;
   
 public TestGradeUI() {
 	
-	
+	//Setting Layout, added spaces to borders
 	setLayout(new BorderLayout());
 	setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
    
+	//Set model, created list
     model = new DefaultListModel();
     list = new JList(model);
     
+    //Labels show final values
     finalTotal = new JLabel("Final Grade Percentage: 0.0%");
-    textGrade = new JLabel("Actual Grade:");
+    textGradeWeight = new JLabel("Weight %: 0.0%");
+    
+    //Labels identify inputs 
+    textGrade = new JLabel("Grade Recieved:");
     textTotal = new JLabel("Total Grade:");
     textAssignment = new JLabel("Assign. Name:");
+    textWGrade = new JLabel("Weight Update:");
     
+    //Initialize handler with addListener to track: grade, total, assignmentName, weight
     handler = new Handler();
-    grade = new JTextField(5);
-    grade.addActionListener(handler);
-    total = new JTextField(5);
-    total.addActionListener(handler);
-    assignmentName = new JTextField(5);
-    assignmentName.addActionListener(handler);
     
-    list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    //Creates inputs
+    grade = new JTextField(5);
+    total = new JTextField(5);
+    assignmentName = new JTextField(5);
+    weight = new JTextField(5);
+    
+    //Adds actionListeners to the components
+    grade.addActionListener(handler);
+    total.addActionListener(handler);
+    assignmentName.addActionListener(handler);
+    weight.addActionListener(handler);
+    
+    //Sets up ListSelectionListener
+    list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     list.addListSelectionListener(this);
     list.setSelectedIndex(0);
     list.setVisibleRowCount(5);
@@ -78,7 +100,7 @@ public TestGradeUI() {
     addButton = new JButton("Add Grade");
     removeButton = new JButton("Remove Grade");
     edit = new JButton("Edit Grade");
-    
+    gradeWeight = new JButton("Update Weight");
     
     edit.addActionListener(handler);
     addButton.addActionListener(handler);
@@ -96,36 +118,42 @@ public TestGradeUI() {
 
     GridLayout layout = new GridLayout(1,0);
     GridLayout layout2 = new GridLayout(0, 1);
+    GridLayout layout3 = new GridLayout(1, 0);
     
     layout.setVgap(20);
     layout2.setVgap(10);
+    layout3.setHgap(20);
     
-    JPanel left = new JPanel(new GridLayout(0,1));
+
     JPanel right = new JPanel(layout2);
     
     JPanel top = new JPanel(layout);
+    JPanel middle = new JPanel(layout);
     JPanel bottom = new JPanel(layout);
-    JPanel bottomPart2 = new JPanel(layout);
-    
+
     
     //pane addButton removeButton grade total finalTotal edit
     
     top.add(addButton);
     top.add(edit);
     top.add(removeButton);
+    top.add(gradeWeight);
     
-    bottom.add(textGrade);
-    bottom.add(grade);
-    bottom.add(textTotal);
-    bottom.add(total);
-    bottom.add(textAssignment);
-    bottom.add(assignmentName);
+    middle.add(textGrade);
+    middle.add(grade);
+    middle.add(textTotal);
+    middle.add(total);
+    middle.add(textAssignment);
+    middle.add(assignmentName);
+    middle.add(textWGrade);
+    middle.add(weight);
     
-    bottomPart2.add(finalTotal);
+    bottom.add(finalTotal);
+    bottom.add(textGradeWeight);
     
     right.add(top);
+    right.add(middle);
     right.add(bottom);
-    right.add(bottomPart2);
     
     add(pane, BorderLayout.LINE_START);
     add(right, BorderLayout.LINE_END);
@@ -257,7 +285,7 @@ public TestGradeUI() {
     JFrame frame = new JFrame("List Model Example");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setContentPane(new TestGradeUI());
-    frame.setSize(800, 200);
+    frame.setSize(1020, 220);
     frame.setVisible(true);
     frame.setResizable(false);
   }
