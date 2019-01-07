@@ -1,4 +1,4 @@
-# GradeCalculator
+# GradeCalculator (WIP - adding more features)
 Just a simple but to be honest a very complex program that calculates the average of a set of numbers and displays all the inputted numbers.  
 
 # Bugs
