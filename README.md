@@ -1,5 +1,5 @@
-# GradeCalculator (Finished but will add more later on)
-Just a simple but to be honest a very complex program that calculates the average of a set of numbers and displays all the inputted numbers.  
+# GradeCalculator
+Just a simple but to be honest a very complex program that calculates the average of a set of numbers and displays all the inputted numbers.
 
 # Bugs
 There are no bugs that I am aware of as of right now.
